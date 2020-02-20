@@ -7,8 +7,8 @@ const Fib = () => {
   const [index, setIndex] = useState("");
 
   useEffect(() => {
-    fetchValues();
     fetchIndexes();
+    fetchValues();
   }, []);
 
   const fetchValues = async () => {
@@ -18,7 +18,8 @@ const Fib = () => {
 
   const fetchIndexes = async () => {
     const newIndexes = await axios.get("/api/values/all");
-    setSeenIndexes(newIndexes);
+
+    setSeenIndexes(newIndexes.data);
   };
 
   const handleSubmit = async event => {
@@ -28,6 +29,8 @@ const Fib = () => {
       index
     });
     setIndex("");
+    fetchIndexes();
+    fetchValues();
   };
 
   const renderSeenIndexes = () => {
@@ -40,7 +43,7 @@ const Fib = () => {
     for (let key in values) {
       entries.push(
         <div key={key}>
-          For index {key} I calculated {values[key]}
+          For index {key} - {values[key]}
         </div>
       );
     }
