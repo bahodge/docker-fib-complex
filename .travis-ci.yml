@@ -1,0 +1,21 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t bahodge/react-test - f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true bahodge/react-test yarn test -- --coverage
+
+after_success:
+  - docker build -t bahodge/multi-client ./client
+  - docker build -t bahodge/multi-nginx ./nginx
+  - docker build -t bahodge/multi-server ./server
+  - docker build -t bahodge/multi-worker ./worker
+  # in travis ci as env variables
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push bahodge/multi-client
+  - docker push bahodge/multi-nginx
+  - docker push bahodge/multi-server
+  - docker push bahodge/multi-worker
