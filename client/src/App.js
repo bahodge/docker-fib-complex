@@ -8,6 +8,7 @@ class App extends Component {
   render() {
     return (
       <Router>
+        <h1>Fib Calculator</h1>
         <div className="App">
           <Link to="/">Home</Link>
           <Link to="/otherpage">Other Page</Link>
